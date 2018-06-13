@@ -10,5 +10,6 @@ docker run $USE_TTY \
   -e BACKUP_DB_PASS \
   -e BACKUP_DB_HOST \
   -e DB_TEMPLATE \
+  -e BACKUP_DUMP \
   --mount source=postgres-backups,destination=/srv/postgres/backups \
   --rm pg-commands ./"$@"

@@ -2,7 +2,7 @@
 set -e
 set -u
 set -o pipefail
-set +a # makes all variables exported in the called script
+set -a # makes all variables exported in the called script
 USAGE="
 
 This script drops and recreates a database from a template.
