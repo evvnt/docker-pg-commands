@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-docker run -it \
+test -t 1 && USE_TTY="-it"
+docker run $USE_TTY \
   -e DB_NAME \
   -e DB_USER \
   -e DB_PASS \
