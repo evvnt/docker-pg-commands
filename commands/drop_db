@@ -12,11 +12,7 @@ Point it to the database to drop from with the DB_ env variables."
 : ${DB_USER?You must provide an DB_USER as an enviornment variable. "$USAGE"}
 : ${DB_PASS?You must provide an DB_PASS as an enviornment variable. "$USAGE"}
 
-
-if PGPASSWORD="$DB_PASS" psql -U $DB_USER -h $DB_HOST -lqt | cut -d \| -f 1 | grep -qw $DB_NAME
-then
+if PGPASSWORD="$DB_PASS" psql -lqtA -U $DB_USER -h $DB_HOST -l | grep -q "^$DB_NAME|";then
   echo Dropping database $DB_NAME on host $DB_HOST as user $DB_USER
   PGPASSWORD="$DB_PASS" dropdb -U $DB_USER -h $DB_HOST $DB_NAME
-else
-  echo Did not find database $DB_NAME
 fi

@@ -18,4 +18,5 @@ BACKUP_DUMP=${BACKUP_DUMP:-$BACKUP_DB_NAME.dump}
 DB_NAME=$TEMPLATE_NAME
 
 ./drop_db
+./create_db
 ./restore_db
