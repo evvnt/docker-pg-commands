@@ -13,4 +13,4 @@ Point it to the server to backup from with the DB env variables."
 : ${DB_PASS?You must provide an DB_PASS as an enviornment variable. "$USAGE"}
 
 echo Starting psql $DB_NAME on host $DB_HOST as user $DB_USER
-PGPASSWORD="$DB_PASS" psql -d $DB_NAME -U $DB_USER -h $DB_HOST
+PGPASSWORD="$DB_PASS" psql -P pager=off -d $DB_NAME -U $DB_USER -h $DB_HOST "$@" 
