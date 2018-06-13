@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
+set +a # makes all variables exported in the called script
+
+USAGE="
+
+This script refreshes the latest backup template from a backup created by backupdb.
+Point it to the server to restore to a template with the DB_ env variables.
+Point it to backup to restore into the template using the BACKUP_DB_NAME env variable.
+By default it names the template latest_\${BACKUP_DB_NAME}."
+
+: ${BACKUP_DB_NAME?You must provide an BACKUP_DB_NAME as an enviornment variable. "$USAGE"}
+
+TEMPLATE_NAME=${TEMPLATE_NAME:-latest_${BACKUP_DB_NAME}}
+BACKUP_DUMP=${BACKUP_DUMP:-$BACKUP_DB_NAME.dump}
+
+PGPASSWORD="$DB_PASS" dropdb -U $DB_USER -h $DB_HOST $DB_NAME
+
+DB_NAME=$TEMPLATE_NAME
+./drop_db
+./restore_db

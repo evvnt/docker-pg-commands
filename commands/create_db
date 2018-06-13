@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
+USAGE="
+
+This script creates a database from a template.
+Point it to the database to create from with the DB_ env variables."
+
+: ${DB_HOST?You must provide an DB_HOST as an enviornment variable. "$USAGE"}
+: ${DB_NAME?You must provide an DB_NAME as an enviornment variable. "$USAGE"}
+: ${DB_USER?You must provide an DB_USER as an enviornment variable. "$USAGE"}
+: ${DB_PASS?You must provide an DB_PASS as an enviornment variable. "$USAGE"}
+DB_TEMPLATE=${DB_TEMPLATE:-template1}
+
+echo Creating database $DB_NAME on host $DB_HOST from template $DB_TEMPLATE as user $DB_USER
+PGPASSWORD="$DB_PASS" createdb -U $DB_USER -h $DB_HOST -T $DB_TEMPLATE $DB_NAME
+

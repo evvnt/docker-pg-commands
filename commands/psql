@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
+USAGE="
+
+This starts psql.
+Point it to the server to backup from with the DB env variables."
+
+: ${DB_HOST?You must provide an DB_HOST as an enviornment variable. "$USAGE"}
+: ${DB_NAME?You must provide an DB_NAME as an enviornment variable. "$USAGE"}
+: ${DB_USER?You must provide an DB_USER as an enviornment variable. "$USAGE"}
+: ${DB_PASS?You must provide an DB_PASS as an enviornment variable. "$USAGE"}
+
+echo Starting psql $DB_NAME on host $DB_HOST as user $DB_USER
+PGPASSWORD="$DB_PASS" psql -d $DB_NAME -U $DB_USER -h $DB_HOST

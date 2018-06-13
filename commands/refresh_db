@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
+set +a # makes all variables exported in the called script
+USAGE="
+
+This script drops and recreates a database from a template.
+Point it to the database to refresh to with the DB_ env variables.
+Point it to the template to refresh from with the DB_TEMPLATE env variables."
+
+: ${DB_TEMPLATE?You must provide an DB_TEMPLATE as an enviornment variable. "$USAGE"}
+: ${DB_NAME?You must provide an DB_NAME as an enviornment variable. "$USAGE"}
+: ${DB_HOST?You must provide an DB_HOST as an enviornment variable. "$USAGE"}
+: ${DB_USER?You must provide an DB_USER as an enviornment variable. "$USAGE"}
+: ${DB_PASS?You must provide an DB_PASS as an enviornment variable. "$USAGE"}
+
+
+./drop_db
+./create_db

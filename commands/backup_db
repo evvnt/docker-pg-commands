@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -e
+set -u
+set -o pipefail
+USAGE="
+
+This script backs up a database.
+Point it to the server to backup from with the BACKUP_DB env variables.
+By default it names the backup file \$BACKUP_DB_NAME.dump.
+These backups persist between runs on the postgres-backup docker volume."
+
+: ${BACKUP_DB_HOST?You must provide an BACKUP_DB_HOST as an enviornment variable. "$USAGE"}
+: ${BACKUP_DB_NAME?You must provide an BACKUP_DB_NAME as an enviornment variable. "$USAGE"}
+: ${BACKUP_DB_USER?You must provide an BACKUP_DB_USER as an enviornment variable. "$USAGE"}
+: ${BACKUP_DB_PASS?You must provide an BACKUP_DB_PASS as an enviornment variable. "$USAGE"}
+BACKUP_DUMP=${BACKUP_DUMP:-$BACKUP_DB_NAME.dump}
+
+echo Backing up database $BACKUP_DB_NAME on host $BACKUP_DB_HOST as user $BACKUP_DB_USER to file $BACKUP_DUMP
+PGPASSWORD="$BACKUP_DB_PASS" pg_dump -d $BACKUP_DB_NAME -U $BACKUP_DB_USER -h $BACKUP_DB_HOST -W --clean -F c -Z 9 -f /srv/postgres/backups/$BACKUP_DUMP
