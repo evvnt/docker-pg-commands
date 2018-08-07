@@ -7,13 +7,12 @@ USAGE="
 
 This script drops and recreates a database from backup already restored to a template (using refresh_template).
 Point it to the database to refresh to with the DB_ env variables.
-Point it to the template to refresh from with the BACKUP_DB_NAME env variables."
+Point it to the template to refresh from with the DB_TEMPLATE env variable."
 
-: ${BACKUP_DB_NAME?You must provide an BACKUP_DB_NAME as an enviornment variable. "$USAGE"}
-: ${DB_NAME?You must provide an DB_NAME as an enviornment variable. "$USAGE"}
-: ${DB_HOST?You must provide an DB_HOST as an enviornment variable. "$USAGE"}
-: ${DB_USER?You must provide an DB_USER as an enviornment variable. "$USAGE"}
-: ${DB_PASS?You must provide an DB_PASS as an enviornment variable. "$USAGE"}
-DB_TEMPLATE=${DB_TEMPLATE:-latest_$BACKUP_DB_NAME}
+: ${DB_TEMPLATE?You must provide DB_TEMPLATE as an enviornment variable. "$USAGE"}
+: ${DB_NAME?You must provide DB_NAME as an enviornment variable. "$USAGE"}
+: ${DB_HOST?You must provide DB_HOST as an enviornment variable. "$USAGE"}
+: ${DB_USER?You must provide DB_USER as an enviornment variable. "$USAGE"}
+: ${DB_PASS?You must provide DB_PASS as an enviornment variable. "$USAGE"}
 ./drop_db
 ./create_db
