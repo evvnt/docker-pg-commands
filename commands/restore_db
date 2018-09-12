@@ -15,5 +15,5 @@ Point it to the server to restore to with the DB_ env variables."
 : ${DB_PASS?You must provide an DB_PASS as an enviornment variable. "$USAGE"}
 
 echo Restoring database $DB_NAME on host $DB_HOST as user $DB_USER from backup $BACKUP_DUMP
-PGPASSWORD="$DB_PASS" pg_restore -U $DB_USER  -h $DB_HOST --no-owner --no-privileges --role=$DB_USER -d $DB_NAME /srv/postgres/backups/$BACKUP_DUMP
+PGPASSWORD="$DB_PASS" pg_restore -U $DB_USER  -h $DB_HOST --no-owner --no-privileges --role=$DB_USER -d $DB_NAME /var/local/postgres/backups/$BACKUP_DUMP
 
