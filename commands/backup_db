@@ -14,6 +14,10 @@ These backups persist between runs on the postgres-backup docker volume."
 : ${BACKUP_DB_USER?You must provide an BACKUP_DB_USER as an enviornment variable. "$USAGE"}
 : ${BACKUP_DB_PASS?You must provide an BACKUP_DB_PASS as an enviornment variable. "$USAGE"}
 BACKUP_DUMP=${BACKUP_DUMP:-$BACKUP_DB_NAME.dump}
+BACKUP_DB_BUCKET=${BACKUP_S3_BUCKET:-geotix-production-db-backup}
 
 echo Backing up database $BACKUP_DB_NAME on host $BACKUP_DB_HOST as user $BACKUP_DB_USER to file $BACKUP_DUMP
 PGPASSWORD="$BACKUP_DB_PASS" pg_dump -d $BACKUP_DB_NAME -U $BACKUP_DB_USER -h $BACKUP_DB_HOST -W --clean -F c -Z 9 -f /srv/postgres/backups/$BACKUP_DUMP
+
+echo Copying back up to s3://$BACKUP_DB_BUCKET/$BACKUP_DUMP
+aws s3 cp /srv/postgres/backups/$BACKUP_DUMP s3://$BACKUP_DB_BUCKET/$BACKUP_DUMP
