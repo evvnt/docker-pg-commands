@@ -13,7 +13,7 @@ Point it to the database to drop from with the DB_ env variables."
 : ${DB_PASS?You must provide an DB_PASS as an enviornment variable. "$USAGE"}
 
 # Fixes errors where connections are left open to the database
-echo Dropping connections to database $DB_NAME on host $DB_HOST
+echo Dropping connections to database $DB_NAME on host $DB_HOST as user $DB_USER
 PGPASSWORD="$DB_PASS" psql -P pager=off -d $DB_NAME -U $DB_USER -h $DB_HOST -c 'SELECT pid, pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = current_database() AND pid <> pg_backend_pid();'
 
 #if PGPASSWORD="$DB_PASS" psql -lqtA -U $DB_USER -h $DB_HOST | grep -q "^$DB_NAME|";then
