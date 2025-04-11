@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+USAGE="
+
+This script imports data from a partial database dump (created via pg_dump).
+Objects are dropped first (if they exist) before being imported.
+Point it to the backup to restore from with the \$DUMP_FILE env variable.
+Point it to the server to restore to with the DB_ env variables."
+
+: "${DUMP_FILE?You must provide an DUMP_FILE as an enviornment variable. "$USAGE"}"
+: "${DB_HOST?You must provide an DB_HOST as an enviornment variable. "$USAGE"}"
+: "${DB_NAME?You must provide an DB_NAME as an enviornment variable. "$USAGE"}"
+: "${DB_USER?You must provide an DB_USER as an enviornment variable. "$USAGE"}"
+: "${DB_PASS?You must provide an DB_PASS as an enviornment variable. "$USAGE"}"
+
+echo "Importing $DUMP_FILE into database $DB_NAME on host $DB_HOST as user $DB_USER..."
+PGPASSWORD="$DB_PASS" pg_restore \
+	--username="$DB_USER" \
+	--host="$DB_HOST" \
+	--no-owner \
+	--no-privileges \
+	--role="$DB_USER" \
+	--dbname="$DB_NAME" \
+	--clean \
+	--if-exists \
+	"/srv/postgres/backups/$DUMP_FILE"
