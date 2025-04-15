@@ -17,3 +17,19 @@ BACKUP_DUMP=${BACKUP_DUMP:-$BACKUP_DB_NAME.dump}
 
 echo Backing up database $BACKUP_DB_NAME on host $BACKUP_DB_HOST as user $BACKUP_DB_USER to file $BACKUP_DUMP
 PGPASSWORD="$BACKUP_DB_PASS" pg_dump -d $BACKUP_DB_NAME -U $BACKUP_DB_USER -h $BACKUP_DB_HOST -W --clean -F c -Z 9 -f /srv/postgres/backups/$BACKUP_DUMP
+
+echo "Backing up critical AAA data to aaa.dump..."
+PGPASSWORD="$BACKUP_DB_PASS" pg_dump \
+	--dbname="$BACKUP_DB_NAME" \
+	--username="$BACKUP_DB_USER" \
+	--host="$BACKUP_DB_HOST" \
+	--password \
+	--clean \
+	--format=c \
+	--compress=9 \
+	--table=aaa_identity_type_policies \
+	--table=aaa_identity_types \
+	--table=aaa_permissions \
+	--table=aaa_policies \
+	--table=aaa_policy_permissions \
+	--file="/srv/postgres/backups/aaa.dump"
