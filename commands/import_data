@@ -4,7 +4,6 @@ set -Eeuo pipefail
 USAGE="
 
 This script imports data from a partial database dump (created via pg_dump).
-Objects are dropped first (if they exist) before being imported.
 Point it to the backup to restore from with the \$DUMP_FILE env variable.
 Point it to the server to restore to with the DB_ env variables."
 
@@ -19,9 +18,10 @@ PGPASSWORD="$DB_PASS" pg_restore \
 	--username="$DB_USER" \
 	--host="$DB_HOST" \
 	--no-owner \
+	--no-acl \
 	--no-privileges \
+	--exit-on-error \
+	--single-transaction \
 	--role="$DB_USER" \
 	--dbname="$DB_NAME" \
-	--clean \
-	--if-exists \
 	"/srv/postgres/backups/$DUMP_FILE"
